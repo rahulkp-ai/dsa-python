@@ -1,0 +1,17 @@
+__pycache__/
+*.pyc
+*.pyo
+venv/
+.env
+.pytest_cache/
+htmlcov/
+.coverage
+.mypy_cache/
+.ipynb_checkpoints/
+dist/
+build/
+*.egg-info/
+.DS_Store
+logs/*.log
+benchmarks/results/*.csv
+benchmarks/results/*.png

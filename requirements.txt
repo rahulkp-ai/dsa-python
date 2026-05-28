@@ -1,0 +1,36 @@
+# Testing
+pytest>=7.4.0
+pytest-cov>=4.1.0
+pytest-benchmark>=4.0.0
+pytest-timeout>=2.1.0
+
+# Code quality
+black>=23.7.0
+flake8>=6.1.0
+mypy>=1.5.0
+isort>=5.12.0
+
+# Notebooks
+jupyter>=1.0.0
+notebook>=7.0.0
+ipykernel>=6.25.0
+nbval>=0.10.0
+
+# Visualization
+matplotlib>=3.7.2
+seaborn>=0.12.2
+networkx>=3.1
+
+# Data
+numpy>=1.25.0
+pandas>=2.0.0
+
+# CLI / UI
+rich>=13.5.0
+typer>=0.9.0
+tqdm>=4.65.0
+
+# Optional
+streamlit>=1.25.0
+fastapi>=0.103.0
+uvicorn>=0.23.0
