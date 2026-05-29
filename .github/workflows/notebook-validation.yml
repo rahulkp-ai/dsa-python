@@ -1,0 +1,20 @@
+name: Notebook Validation
+
+on: [push, pull_request]
+
+jobs:
+  validate:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+      - run: pip install jupyter nbval
+      - name: Validate notebooks
+        run: |
+          if ls notebooks/*.ipynb 2>/dev/null; then
+            pytest --nbval-lax notebooks/
+          else
+            echo "No notebooks found, skipping validation"
+          fi

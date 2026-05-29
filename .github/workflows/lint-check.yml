@@ -1,0 +1,21 @@
+name: Lint & Format Check
+
+on: [push, pull_request]
+
+jobs:
+  lint:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+          cache: pip
+      - name: Install linting tools
+        run: pip install flake8 black isort mypy
+      - name: Run flake8
+        run: flake8 src/ tests/ --max-line-length=88 --extend-ignore=E203,W503,E501
+      - name: Check black formatting
+        run: black --check src/ tests/ --line-length=88
+      - name: Check isort
+        run: isort --check-only src/ tests/ --profile=black
