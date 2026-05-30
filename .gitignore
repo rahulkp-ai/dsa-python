@@ -1,17 +1,74 @@
-__pycache__/
+# ==========================================
+# Operating System & IDEs
+# ==========================================
+.DS_Store
+.DS_Store?
+._*
+.Spotlight-V100
+.Trashes
+ehthumbs.db
+Thumbs.db
+.vscode/
+.idea/
+
+# ==========================================
+# Python & Virtual Environments
+# ==========================================
+venv/
+ENV/
+env/
+.env
 *.pyc
 *.pyo
-venv/
-.env
-.pytest_cache/
-htmlcov/
-.coverage
-.mypy_cache/
-.ipynb_checkpoints/
-dist/
+*.pyd
+__pycache__/
+
+# ==========================================
+# Build, Distribution, & Metadata
+# ==========================================
 build/
+develop-eggs/
+dist/
+downloads/
+eggs/
+.eggs/
+lib/
+lib64/
+parts/
+sdist/
+var/
+wheels/
+share/python-wheels/
 *.egg-info/
-.DS_Store
+.installed.cfg
+*.egg
+MANIFEST
+
+# ==========================================
+# Testing & Code Quality
+# ==========================================
+.htmlcov/
+.coverage
+.coverage.*
+.cache
+nosetests.xml
+coverage.xml
+*.cover
+*.log
+.hypothesis/
+.pytest_cache/
+.mypy_cache/
+.ruff_cache/
+
+# ==========================================
+# Jupyter Notebooks
+# ==========================================
+.ipynb_checkpoints
+*/.ipynb_checkpoints/*
+
+# ==========================================
+# Project Specific (Logs & Benchmarks)
+# ==========================================
 logs/*.log
 benchmarks/results/*.csv
 benchmarks/results/*.png
