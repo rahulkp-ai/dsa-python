@@ -160,6 +160,108 @@ def three_sum(nums: List[int]) -> List[List[int]]:
             else: r -= 1
     return result
 
+"""
+Prefix Sum
+The Goal: Calculate the sum of elements within a specific range or subarray of an array efficiently, 
+especially when you need to do it multiple times.
+The Trick: Precompute a cumulative running total of the array.
+Create a new array where each index i stores the sum of all elements from the start up to i. 
+To find the sum between any two indices L and R instantly, 
+just subtract the prefix sum just before the range from the prefix sum at the end of the 
+range: P[R]-P[L-1]. 
+This drops the query time from O(N) to O(1).
+"""
+
+class PrefixSum:
+    """ O(1) range sum quries after O(n) build
+    ps = PrefixSum([1,2,3,4,5]); ps.range_sum(1,3)
+    9
+    """
+    def __init__(self, nums: List[int]) -> None:
+        self.p = [0] * (len(nums) + 1)
+        for i, v in enumerate(nums): self.p[i + 1] = self.p[i] + v
+    def range_sum(self, l: int, r: int) -> int:
+        return self.p[r + 1] - self.p[l]
+
+"""
+Rotate Array
+The Goal: Shift all elements of an array to the right by a given number of steps, k, 
+wrapping the elements around to the front when they pass the end.
+The Trick: Avoid shifting elements one by one, which is too slow. 
+Instead, use the "Three Reverses" method.
+First, handle cases where k is larger than the array length by setting k=k%length. 
+Then, reverse the entire array. After that, reverse the first k elements, and finally, 
+reverse the remaining elements. By flipping the array in pieces, 
+the elements end up exactly in their correctly shifted positions in O(N) time and O(1) space.
+"""
+
+def rotate_array(nums: List[int], k: int) -> List[int]:
+    """ Rotate right by k (reverse trick). O(n) time, O(1) space.
+    rotate_array([1,2,3,4,5,6,7],3)
+    [5,6,7,1,2,3,4]
+    """
+    nums = nums.copy(); n = len(nums); k %= n
+    def rev(a, i, j):
+        while i < j: a[i], a[j] = a[j], a[i]; i += 1; j -= 1
+    rev(nums, 0, n-1); rev(nums, 0, k-1); rev(nums, k, n-1)
+    return nums
+
+"""
+Container with Most Water
+The Goal: Find two vertical lines in an array that, 
+together with the x-axis, form a container that holds the maximum amount of water.
+The Trick: Use the Two-Pointer technique to shrink the search space from the outside in.
+Place one pointer at the start (left) and one at the end (right) of the array.
+"""
+
+def max_area(height: List[int]) -> int:
+    """Container with most water. O(n) time, O(1) space.
+    max_area([1,8,6,2,5,4,8,3,7])
+    49
+    """
+    l, r, best = 0, len(height) - 1, 0
+    while l < r:
+        best = max(best, min(height[l], height[r]) * (r - l))
+        if height[l] < height[r]: l += 1
+        else: r -= 1
+    return best
+
+"""
+Find Min Rotated
+The Goal: Find the minimum element in a sorted array that has been rotated an unknown number of times 
+(e.g., `[4, 5, 6, 7, 0, 1, 2]`).
+The Trick: Use a modified Binary Search to narrow down the search space in $O(\log N)$ time instead of scanning linearly.
+Find the middle element and compare it to the rightmost element. If the middle element is greater than the rightmost element, 
+it means the rotation point (and the minimum element) lies in the right half, 
+so you move your left pointer to `mid + 1`. Otherwise, the minimum element is either at `mid` or to its left, 
+so you move your right pointer to `mid`. By exploiting the sorted nature of the halves, 
+you cut the problem size in half with each step.
+"""
+
+def find_min_rotated(nums: List[int]) -> int:
+    """ Find min in rotated sorted array. O(log n).
+    find_min_rotated([3,4,5,1,2])
+    1
+    """
+    l, r = 0, len(nums) - 1
+    while l < r:
+        mid = (l + r) // 2
+        if nums[mid] > nums[r]: l = mid + 1
+        else: r = mid
+    return nums[l]
+
+def max_product_subarray(nums: List[int]) -> int:
+    """Max product subarray. O(n) time, O(1) space.
+    max_product_subarray([2,3,-2,4])
+    6
+    """
+    max_p = min_p = result = nums[0]
+    for num in nums[1:]:
+        candidates = (num, max_p * num, min_p * num)
+        max_p, min_p = max(candidates), min(candidates)
+        result = max(result, max_p)
+    return result
+
 if __name__ == "__main__":
     print("Two Sum:", two_sun([2,11,7,15],9))
     print("Max subarray:", max_subarray([-2,1,-3,4,-1,2,1,-5,4]))
@@ -167,3 +269,7 @@ if __name__ == "__main__":
     print("Product Expect Self:", product_expect_self([1,2,3,4]))
     print("Trap Rain Water:", trap_rain_water([0,1,0,2,1,0,1,3,2,1,2,1]))
     print("3Sum:", three_sum([-1,0,1,2,-1,-4]))
+    ps = PrefixSum([1,2,3,4,5])
+    print("Range Sum [1,3]:", ps.range_sum(1,3))
+    print("Rotate Array:", rotate_array([1,2,3,4,5,6,7],3))
+    print("Max Area:", max_area([1,8,6,2,5,4,8,3,7]))
