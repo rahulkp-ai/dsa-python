@@ -13,7 +13,7 @@ The Trick: Instead of checking every pair, use a Hash Map (Dictionary).
 As you iterate through the array, calculate the complement (Target - Current Number). 
 If the complement is already in your map, you've found your pair.
 """
-def two_sun(nums: List[int], target: int) -> Optional[List[int]]:
+def two_sum(nums: List[int], target: int) -> Optional[List[int]]:
     """ 
     Hash-map two sum. O(n) time, O(n) space.
     two_sum([2,7,11,15],9)
@@ -84,9 +84,9 @@ At index 2: 1x2x4=8
 At index 3: 1x2x3=6
 """
 
-def product_expect_self(nums: List[int]) -> List[int]:
+def product_except_self(nums: List[int]) -> List[int]:
     """ Product of all elements except self. No Division, O(n) time, O(1) extra
-    product_expect_self([1,2,3,4])
+    product_except_self([1,2,3,4])
     [24,12, 8, 6]
     """
     n = len(nums)
@@ -196,7 +196,7 @@ the elements end up exactly in their correctly shifted positions in O(N) time an
 """
 
 def rotate_array(nums: List[int], k: int) -> List[int]:
-    """ Rotate right by k (reverse trick). O(n) time, O(1) space.
+    r""" Rotate right by k (reverse trick). O(n) time, O(1) space.
     rotate_array([1,2,3,4,5,6,7],3)
     [5,6,7,1,2,3,4]
     """
@@ -263,10 +263,10 @@ def max_product_subarray(nums: List[int]) -> int:
     return result
 
 if __name__ == "__main__":
-    print("Two Sum:", two_sun([2,11,7,15],9))
+    print("Two Sum:", two_sum([2,11,7,15],9))
     print("Max subarray:", max_subarray([-2,1,-3,4,-1,2,1,-5,4]))
     print("Max profit:", max_profit([7,1,5,3,6,4]))
-    print("Product Expect Self:", product_expect_self([1,2,3,4]))
+    print("Product Expect Self:", product_except_self([1,2,3,4]))
     print("Trap Rain Water:", trap_rain_water([0,1,0,2,1,0,1,3,2,1,2,1]))
     print("3Sum:", three_sum([-1,0,1,2,-1,-4]))
     ps = PrefixSum([1,2,3,4,5])
