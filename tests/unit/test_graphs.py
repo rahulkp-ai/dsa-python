@@ -74,4 +74,4 @@ def test_kruskal():
 # --- Grid / Number of Islands ---
 def test_islands(): assert num_islands([["1","1","0"],["1","1","0"],["0","0","1"]]) == 2
 def test_islands_none(): assert num_islands([["0","0"],["0","0"]]) == 0
-def test_islands_all(): assert num_islands([["1","1"],["1","1"]]) == 1
+def test_islands_all(): assert num_islands([["1", "1"], ["1", "1"]]) == 1
