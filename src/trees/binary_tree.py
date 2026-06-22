@@ -73,13 +73,21 @@ def is_balanced(root: Optional[TreeNode]) -> bool:
         return 1 + max(l, r)
     return chk(root) != -1
 
+# def is_symmetric(root: Optional[TreeNode]) -> bool:
+#     """Mirror check. O(n)."""
+#     def mirror(a: Optional[TreeNode], b: Optional[TreeNode]) -> bool:
+#         if not a and not b: return True
+#         if not a or not b: return False
+#         return a.val == b.val and mirror(a.left, b.right) and mirror(a.right, b.left)
+#     return mirror(root, root)
 def is_symmetric(root: Optional[TreeNode]) -> bool:
     """Mirror check. O(n)."""
+    if not root: return True
     def mirror(a: Optional[TreeNode], b: Optional[TreeNode]) -> bool:
         if not a and not b: return True
         if not a or not b: return False
         return a.val == b.val and mirror(a.left, b.right) and mirror(a.right, b.left)
-    return mirror(root, root)
+    return mirror(root.left, root.right)
 
 def lca(root: Optional[TreeNode], p: int, q: int) -> Optional[TreeNode]:
     """Lowest Common Ancestor. O(n)."""
