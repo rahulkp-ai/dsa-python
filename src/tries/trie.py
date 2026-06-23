@@ -42,7 +42,14 @@ class Trie:
         return n
 
     def count_prefix(self, prefix: str) -> int:
-        n = self._go(prefix); return n.count if n else 0
+            n = self.root
+            total = 0
+            for c in prefix:
+                if c not in n.children: 
+                    return 0
+                n = n.children[c]
+                total += n.count
+            return total
 
     def delete(self, word: str) -> bool:
         def _del(n: TrieNode, w: str, i: int) -> bool:
