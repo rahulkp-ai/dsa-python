@@ -14,8 +14,8 @@ Algorithms:
     Counting Sort   O(n+k)    / O(k)
     Radix Sort      O(nk)     / O(n+k)
 """
-from typing import List, Optional
-import random
+
+from typing import List
 
 
 def bubble_sort(arr: List[int]) -> List[int]:
@@ -72,9 +72,11 @@ def _merge(left: List[int], right: List[int]) -> List[int]:
     result, i, j = [], 0, 0
     while i < len(left) and j < len(right):
         if left[i] <= right[j]:
-            result.append(left[i]); i += 1
+            result.append(left[i])
+            i += 1
         else:
-            result.append(right[j]); j += 1
+            result.append(right[j])
+            j += 1
     result.extend(left[i:])
     result.extend(right[j:])
     return result
@@ -85,9 +87,9 @@ def quick_sort(arr: List[int]) -> List[int]:
     if len(arr) <= 1:
         return arr
     pivot = arr[len(arr) // 2]
-    left   = [x for x in arr if x < pivot]
+    left = [x for x in arr if x < pivot]
     middle = [x for x in arr if x == pivot]
-    right  = [x for x in arr if x > pivot]
+    right = [x for x in arr if x > pivot]
     return quick_sort(left) + middle + quick_sort(right)
 
 
@@ -106,8 +108,10 @@ def heap_sort(arr: List[int]) -> List[int]:
 def _heapify(arr: List[int], n: int, i: int) -> None:
     largest = i
     l, r = 2 * i + 1, 2 * i + 2
-    if l < n and arr[l] > arr[largest]: largest = l
-    if r < n and arr[r] > arr[largest]: largest = r
+    if l < n and arr[l] > arr[largest]:
+        largest = l
+    if r < n and arr[r] > arr[largest]:
+        largest = r
     if largest != i:
         arr[i], arr[largest] = arr[largest], arr[i]
         _heapify(arr, n, largest)
@@ -115,20 +119,24 @@ def _heapify(arr: List[int], n: int, i: int) -> None:
 
 def counting_sort(arr: List[int]) -> List[int]:
     """Counting Sort. O(n+k) time, O(k) space. Non-negative integers only."""
-    if not arr: return []
+    if not arr:
+        return []
     if min(arr) < 0:
         raise ValueError("Counting sort requires non-negative integers.")
     max_val = max(arr)
     count = [0] * (max_val + 1)
-    for num in arr: count[num] += 1
+    for num in arr:
+        count[num] += 1
     result = []
-    for i, freq in enumerate(count): result.extend([i] * freq)
+    for i, freq in enumerate(count):
+        result.extend([i] * freq)
     return result
 
 
 def radix_sort(arr: List[int]) -> List[int]:
     """Radix Sort (LSD). O(nk) time, O(n+k) space."""
-    if not arr: return []
+    if not arr:
+        return []
     arr = arr.copy()
     max_val = max(arr)
     exp = 1
@@ -142,8 +150,10 @@ def _counting_sort_digit(arr: List[int], exp: int) -> List[int]:
     n = len(arr)
     output = [0] * n
     count = [0] * 10
-    for num in arr: count[(num // exp) % 10] += 1
-    for i in range(1, 10): count[i] += count[i - 1]
+    for num in arr:
+        count[(num // exp) % 10] += 1
+    for i in range(1, 10):
+        count[i] += count[i - 1]
     for i in range(n - 1, -1, -1):
         idx = (arr[i] // exp) % 10
         output[count[idx] - 1] = arr[i]

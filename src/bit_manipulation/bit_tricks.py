@@ -2,6 +2,7 @@
 Module: bit_tricks.py  Topic: Bit Manipulation
 Popcount, power of two, XOR tricks, bit DP, bitwise ops.
 """
+
 from typing import List
 
 
@@ -11,7 +12,9 @@ def count_bits(n: int) -> int:
     3
     """
     count = 0
-    while n: n &= n-1; count += 1
+    while n:
+        n &= n - 1
+        count += 1
     return count
 
 
@@ -20,7 +23,7 @@ def is_power_of_two(n: int) -> bool:
     >>> is_power_of_two(16)
     True
     """
-    return n > 0 and (n & (n-1)) == 0
+    return n > 0 and (n & (n - 1)) == 0
 
 
 def single_number(nums: List[int]) -> int:
@@ -29,7 +32,8 @@ def single_number(nums: List[int]) -> int:
     4
     """
     res = 0
-    for n in nums: res ^= n
+    for n in nums:
+        res ^= n
     return res
 
 
@@ -50,8 +54,10 @@ def missing_number(nums: List[int]) -> int:
     >>> missing_number([3,0,1])
     2
     """
-    n = len(nums); res = n
-    for i, v in enumerate(nums): res ^= i ^ v
+    n = len(nums)
+    res = n
+    for i, v in enumerate(nums):
+        res ^= i ^ v
     return res
 
 
@@ -61,7 +67,9 @@ def reverse_bits(n: int) -> int:
     True
     """
     res = 0
-    for _ in range(32): res = (res << 1) | (n & 1); n >>= 1
+    for _ in range(32):
+        res = (res << 1) | (n & 1)
+        n >>= 1
     return res
 
 
@@ -90,8 +98,9 @@ def count_bits_range(n: int) -> List[int]:
     >>> count_bits_range(5)
     [0, 1, 1, 2, 1, 2]
     """
-    dp = [0]*(n+1)
-    for i in range(1, n+1): dp[i] = dp[i>>1] + (i&1)
+    dp = [0] * (n + 1)
+    for i in range(1, n + 1):
+        dp[i] = dp[i >> 1] + (i & 1)
     return dp
 
 
@@ -102,7 +111,9 @@ def sum_no_plus(a: int, b: int) -> int:
     """
     mask = 0xFFFFFFFF
     while b & mask:
-        carry = a & b; a ^= b; b = carry << 1
+        carry = a & b
+        a ^= b
+        b = carry << 1
     return a if b == 0 else a & mask
 
 
@@ -112,7 +123,7 @@ def subsets_bitmask(nums: List[int]) -> List[List[int]]:
     8
     """
     n = len(nums)
-    return [[nums[j] for j in range(n) if mask & (1<<j)] for mask in range(1<<n)]
+    return [[nums[j] for j in range(n) if mask & (1 << j)] for mask in range(1 << n)]
 
 
 def num_of_flips(start: int, goal: int) -> int:
@@ -128,11 +139,12 @@ def max_xor(nums: List[int]) -> int:
     >>> max_xor([3,10,5,25,2,8])
     28
     """
-    max_result = 0; prefix = 0
+    max_result = 0
+    prefix = 0
     for i in range(31, -1, -1):
-        prefix |= 1<<i
+        prefix |= 1 << i
         prefixes = {n & prefix for n in nums}
-        temp = max_result | (1<<i)
+        temp = max_result | (1 << i)
         if any(temp ^ p in prefixes for p in prefixes):
             max_result = temp
     return max_result
@@ -141,12 +153,12 @@ def max_xor(nums: List[int]) -> int:
 if __name__ == "__main__":
     print("Popcount(11):", count_bits(11))
     print("Power of 2 (16):", is_power_of_two(16))
-    print("Single number:", single_number([4,1,2,1,2]))
-    print("Missing number:", missing_number([3,0,1]))
+    print("Single number:", single_number([4, 1, 2, 1, 2]))
+    print("Missing number:", missing_number([3, 0, 1]))
     print("Bit ops on 10 (1010):")
-    print("  get bit 1:", get_bit(10,1))
-    print("  set bit 0:", bin(set_bit(10,0)))
-    print("  clear bit 1:", bin(clear_bit(10,1)))
+    print("  get bit 1:", get_bit(10, 1))
+    print("  set bit 0:", bin(set_bit(10, 0)))
+    print("  clear bit 1:", bin(clear_bit(10, 1)))
     print("Count bits 0-5:", count_bits_range(5))
-    print("Sum 3+5 (no +):", sum_no_plus(3,5))
-    print("Subsets [1,2,3]:", len(subsets_bitmask([1,2,3])))
+    print("Sum 3+5 (no +):", sum_no_plus(3, 5))
+    print("Subsets [1,2,3]:", len(subsets_bitmask([1, 2, 3])))

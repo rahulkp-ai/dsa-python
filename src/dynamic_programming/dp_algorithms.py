@@ -3,15 +3,18 @@ Module: dp_algorithms.py  Topic: Dynamic Programming
 Fibonacci, Coin Change, 0/1 Knapsack, LCS, LIS, Edit Distance,
 House Robber, Unique Paths, Word Break, Climbing Stairs, Max Product.
 """
-from typing import List
+
 import bisect
+from typing import List
 
 
 def fibonacci(n: int) -> int:
     """Fibonacci (space-optimised). O(n) time, O(1) space."""
-    if n <= 1: return n
+    if n <= 1:
+        return n
     a, b = 0, 1
-    for _ in range(2, n + 1): a, b = b, a + b
+    for _ in range(2, n + 1):
+        a, b = b, a + b
     return b
 
 
@@ -20,10 +23,12 @@ def coin_change(coins: List[int], amount: int) -> int:
     >>> coin_change([1,5,6,9], 11)
     2
     """
-    dp = [float("inf")] * (amount + 1); dp[0] = 0
+    dp = [float("inf")] * (amount + 1)
+    dp[0] = 0
     for i in range(1, amount + 1):
         for c in coins:
-            if c <= i: dp[i] = min(dp[i], dp[i - c] + 1)
+            if c <= i:
+                dp[i] = min(dp[i], dp[i - c] + 1)
     return int(dp[amount]) if dp[amount] != float("inf") else -1
 
 
@@ -32,9 +37,11 @@ def coin_change_ways(coins: List[int], amount: int) -> int:
     >>> coin_change_ways([1,2,5], 5)
     4
     """
-    dp = [0] * (amount + 1); dp[0] = 1
+    dp = [0] * (amount + 1)
+    dp[0] = 1
     for c in coins:
-        for i in range(c, amount + 1): dp[i] += dp[i - c]
+        for i in range(c, amount + 1):
+            dp[i] += dp[i - c]
     return dp[amount]
 
 
@@ -59,24 +66,34 @@ def lcs(s1: str, s2: str) -> int:
     dp = [[0] * (n + 1) for _ in range(m + 1)]
     for i in range(1, m + 1):
         for j in range(1, n + 1):
-            if s1[i-1] == s2[j-1]: dp[i][j] = dp[i-1][j-1] + 1
-            else: dp[i][j] = max(dp[i-1][j], dp[i][j-1])
+            if s1[i - 1] == s2[j - 1]:
+                dp[i][j] = dp[i - 1][j - 1] + 1
+            else:
+                dp[i][j] = max(dp[i - 1][j], dp[i][j - 1])
     return dp[m][n]
 
 
 def lcs_string(s1: str, s2: str) -> str:
     """Return actual LCS string."""
     m, n = len(s1), len(s2)
-    dp = [[0]*(n+1) for _ in range(m+1)]
-    for i in range(1,m+1):
-        for j in range(1,n+1):
-            if s1[i-1]==s2[j-1]: dp[i][j]=dp[i-1][j-1]+1
-            else: dp[i][j]=max(dp[i-1][j],dp[i][j-1])
-    res=[]; i,j=m,n
-    while i>0 and j>0:
-        if s1[i-1]==s2[j-1]: res.append(s1[i-1]); i-=1; j-=1
-        elif dp[i-1][j]>dp[i][j-1]: i-=1
-        else: j-=1
+    dp = [[0] * (n + 1) for _ in range(m + 1)]
+    for i in range(1, m + 1):
+        for j in range(1, n + 1):
+            if s1[i - 1] == s2[j - 1]:
+                dp[i][j] = dp[i - 1][j - 1] + 1
+            else:
+                dp[i][j] = max(dp[i - 1][j], dp[i][j - 1])
+    res = []
+    i, j = m, n
+    while i > 0 and j > 0:
+        if s1[i - 1] == s2[j - 1]:
+            res.append(s1[i - 1])
+            i -= 1
+            j -= 1
+        elif dp[i - 1][j] > dp[i][j - 1]:
+            i -= 1
+        else:
+            j -= 1
     return "".join(reversed(res))
 
 
@@ -88,8 +105,10 @@ def lis(nums: List[int]) -> int:
     tails: List[int] = []
     for n in nums:
         pos = bisect.bisect_left(tails, n)
-        if pos == len(tails): tails.append(n)
-        else: tails[pos] = n
+        if pos == len(tails):
+            tails.append(n)
+        else:
+            tails[pos] = n
     return len(tails)
 
 
@@ -99,13 +118,17 @@ def edit_distance(w1: str, w2: str) -> int:
     3
     """
     m, n = len(w1), len(w2)
-    dp = [[0]*(n+1) for _ in range(m+1)]
-    for i in range(m+1): dp[i][0] = i
-    for j in range(n+1): dp[0][j] = j
-    for i in range(1,m+1):
-        for j in range(1,n+1):
-            if w1[i-1]==w2[j-1]: dp[i][j]=dp[i-1][j-1]
-            else: dp[i][j]=1+min(dp[i-1][j],dp[i][j-1],dp[i-1][j-1])
+    dp = [[0] * (n + 1) for _ in range(m + 1)]
+    for i in range(m + 1):
+        dp[i][0] = i
+    for j in range(n + 1):
+        dp[0][j] = j
+    for i in range(1, m + 1):
+        for j in range(1, n + 1):
+            if w1[i - 1] == w2[j - 1]:
+                dp[i][j] = dp[i - 1][j - 1]
+            else:
+                dp[i][j] = 1 + min(dp[i - 1][j], dp[i][j - 1], dp[i - 1][j - 1])
     return dp[m][n]
 
 
@@ -115,17 +138,22 @@ def house_robber(nums: List[int]) -> int:
     12
     """
     a = b = 0
-    for n in nums: a, b = b, max(b, a + n)
+    for n in nums:
+        a, b = b, max(b, a + n)
     return b
 
 
 def house_robber_ii(nums: List[int]) -> int:
     """House Robber circular. O(n) time."""
+
     def rob(h: List[int]) -> int:
         a = b = 0
-        for v in h: a, b = b, max(b, a + v)
+        for v in h:
+            a, b = b, max(b, a + v)
         return b
-    if len(nums) == 1: return nums[0]
+
+    if len(nums) == 1:
+        return nums[0]
     return max(rob(nums[:-1]), rob(nums[1:]))
 
 
@@ -136,8 +164,9 @@ def unique_paths(m: int, n: int) -> int:
     """
     dp = [1] * n
     for _ in range(1, m):
-        for j in range(1, n): dp[j] += dp[j-1]
-    return dp[n-1]
+        for j in range(1, n):
+            dp[j] += dp[j - 1]
+    return dp[n - 1]
 
 
 def word_break(s: str, words: List[str]) -> bool:
@@ -145,10 +174,15 @@ def word_break(s: str, words: List[str]) -> bool:
     >>> word_break("leetcode", ["leet","code"])
     True
     """
-    ws = set(words); n = len(s); dp = [False]*(n+1); dp[0] = True
-    for i in range(1, n+1):
+    ws = set(words)
+    n = len(s)
+    dp = [False] * (n + 1)
+    dp[0] = True
+    for i in range(1, n + 1):
         for j in range(i):
-            if dp[j] and s[j:i] in ws: dp[i] = True; break
+            if dp[j] and s[j:i] in ws:
+                dp[i] = True
+                break
     return dp[n]
 
 
@@ -157,9 +191,11 @@ def climbing_stairs(n: int) -> int:
     >>> climbing_stairs(5)
     8
     """
-    if n <= 2: return n
+    if n <= 2:
+        return n
     a, b = 1, 2
-    for _ in range(3, n+1): a, b = b, a + b
+    for _ in range(3, n + 1):
+        a, b = b, a + b
     return b
 
 
@@ -170,7 +206,7 @@ def max_product_subarray(nums: List[int]) -> int:
     """
     mx = mn = res = nums[0]
     for num in nums[1:]:
-        cands = (num, mx*num, mn*num)
+        cands = (num, mx * num, mn * num)
         mx, mn = max(cands), min(cands)
         res = max(res, mx)
     return res
@@ -182,26 +218,32 @@ def palindromic_substrings(s: str) -> int:
     3
     """
     count = 0
+
     def expand(l: int, r: int) -> None:
         nonlocal count
         while l >= 0 and r < len(s) and s[l] == s[r]:
-            count += 1; l -= 1; r += 1
-    for i in range(len(s)): expand(i, i); expand(i, i+1)
+            count += 1
+            l -= 1
+            r += 1
+
+    for i in range(len(s)):
+        expand(i, i)
+        expand(i, i + 1)
     return count
 
 
 if __name__ == "__main__":
     print("Fibonacci(10):", fibonacci(10))
-    print("Coin Change [1,5,6,9]->11:", coin_change([1,5,6,9], 11))
-    print("Ways [1,2,5]->5:", coin_change_ways([1,2,5], 5))
-    print("Knapsack:", knapsack_01([2,3,4,5],[3,4,5,6],5))
-    print("LCS:", lcs("ABCBDAB","BDCABA"), lcs_string("ABCBDAB","BDCABA"))
-    print("LIS:", lis([10,9,2,5,3,7,101,18]))
-    print("Edit Distance:", edit_distance("horse","ros"))
-    print("House Robber:", house_robber([2,7,9,3,1]))
-    print("House Robber II:", house_robber_ii([2,3,2]))
-    print("Unique Paths:", unique_paths(3,7))
-    print("Word Break:", word_break("leetcode",["leet","code"]))
+    print("Coin Change [1,5,6,9]->11:", coin_change([1, 5, 6, 9], 11))
+    print("Ways [1,2,5]->5:", coin_change_ways([1, 2, 5], 5))
+    print("Knapsack:", knapsack_01([2, 3, 4, 5], [3, 4, 5, 6], 5))
+    print("LCS:", lcs("ABCBDAB", "BDCABA"), lcs_string("ABCBDAB", "BDCABA"))
+    print("LIS:", lis([10, 9, 2, 5, 3, 7, 101, 18]))
+    print("Edit Distance:", edit_distance("horse", "ros"))
+    print("House Robber:", house_robber([2, 7, 9, 3, 1]))
+    print("House Robber II:", house_robber_ii([2, 3, 2]))
+    print("Unique Paths:", unique_paths(3, 7))
+    print("Word Break:", word_break("leetcode", ["leet", "code"]))
     print("Climbing Stairs:", climbing_stairs(5))
-    print("Max Product:", max_product_subarray([2,3,-2,4]))
+    print("Max Product:", max_product_subarray([2, 3, -2, 4]))
     print("Palindromic Substrings:", palindromic_substrings("aaa"))

@@ -2,8 +2,9 @@
 Module: string_algorithms.py  Topic: Strings
 Sliding window, two pointers, KMP, anagram, palindrome, Rabin-Karp.
 """
-from typing import List, Optional
+
 from collections import Counter, defaultdict
+from typing import List
 
 
 def longest_substring_no_repeat(s: str) -> int:
@@ -11,10 +12,13 @@ def longest_substring_no_repeat(s: str) -> int:
     >>> longest_substring_no_repeat("abcabcbb")
     3
     """
-    seen: dict = {}; l = best = 0
+    seen: dict = {}
+    l = best = 0
     for r, c in enumerate(s):
-        if c in seen and seen[c] >= l: l = seen[c]+1
-        seen[c] = r; best = max(best, r-l+1)
+        if c in seen and seen[c] >= l:
+            l = seen[c] + 1
+        seen[c] = r
+        best = max(best, r - l + 1)
     return best
 
 
@@ -23,19 +27,25 @@ def min_window_substring(s: str, t: str) -> str:
     >>> min_window_substring("ADOBECODEBANC","ABC")
     'BANC'
     """
-    need = Counter(t); have, total = 0, len(need)
-    res, res_len = [-1,-1], float("inf")
-    window: dict = {}; l = 0
+    need = Counter(t)
+    have, total = 0, len(need)
+    res, res_len = [-1, -1], float("inf")
+    window: dict = {}
+    l = 0
     for r, c in enumerate(s):
-        window[c] = window.get(c,0)+1
-        if c in need and window[c] == need[c]: have += 1
+        window[c] = window.get(c, 0) + 1
+        if c in need and window[c] == need[c]:
+            have += 1
         while have == total:
-            if r-l+1 < res_len: res=[l,r]; res_len=r-l+1
+            if r - l + 1 < res_len:
+                res = [l, r]
+                res_len = r - l + 1
             window[s[l]] -= 1
-            if s[l] in need and window[s[l]] < need[s[l]]: have -= 1
+            if s[l] in need and window[s[l]] < need[s[l]]:
+                have -= 1
             l += 1
     l, r = res
-    return s[l:r+1] if res_len != float("inf") else ""
+    return s[l : r + 1] if res_len != float("inf") else ""
 
 
 def is_anagram(s: str, t: str) -> bool:
@@ -52,7 +62,8 @@ def group_anagrams(strs: List[str]) -> List[List[str]]:
     3
     """
     groups: dict = defaultdict(list)
-    for s in strs: groups[tuple(sorted(s))].append(s)
+    for s in strs:
+        groups[tuple(sorted(s))].append(s)
     return list(groups.values())
 
 
@@ -71,13 +82,20 @@ def longest_palindromic_substring(s: str) -> str:
     True
     """
     res = ""
+
     def expand(l: int, r: int) -> str:
-        while l >= 0 and r < len(s) and s[l] == s[r]: l -= 1; r += 1
-        return s[l+1:r]
+        while l >= 0 and r < len(s) and s[l] == s[r]:
+            l -= 1
+            r += 1
+        return s[l + 1 : r]
+
     for i in range(len(s)):
-        odd = expand(i, i); even = expand(i, i+1)
-        if len(odd) > len(res): res = odd
-        if len(even) > len(res): res = even
+        odd = expand(i, i)
+        even = expand(i, i + 1)
+        if len(odd) > len(res):
+            res = odd
+        if len(even) > len(res):
+            res = even
     return res
 
 
@@ -86,21 +104,40 @@ def kmp_search(text: str, pattern: str) -> List[int]:
     >>> kmp_search("AABAACAADAABAABA","AABA")
     [0, 9, 12]
     """
-    if not pattern: return []
+    if not pattern:
+        return []
+
     def build_lps(p: str) -> List[int]:
-        lps = [0]*len(p); l = 0; i = 1
+        lps = [0] * len(p)
+        l = 0
+        i = 1
         while i < len(p):
-            if p[i] == p[l]: l += 1; lps[i] = l; i += 1
-            elif l: l = lps[l-1]
-            else: lps[i] = 0; i += 1
+            if p[i] == p[l]:
+                l += 1
+                lps[i] = l
+                i += 1
+            elif l:
+                l = lps[l - 1]
+            else:
+                lps[i] = 0
+                i += 1
         return lps
-    lps = build_lps(pattern); res: List[int] = []; i = j = 0
+
+    lps = build_lps(pattern)
+    res: List[int] = []
+    i = j = 0
     while i < len(text):
-        if text[i] == pattern[j]: i += 1; j += 1
-        if j == len(pattern): res.append(i-j); j = lps[j-1]
+        if text[i] == pattern[j]:
+            i += 1
+            j += 1
+        if j == len(pattern):
+            res.append(i - j)
+            j = lps[j - 1]
         elif i < len(text) and text[i] != pattern[j]:
-            if j: j = lps[j-1]
-            else: i += 1
+            if j:
+                j = lps[j - 1]
+            else:
+                i += 1
     return res
 
 
@@ -110,10 +147,17 @@ def count_palindromic_substrings(s: str) -> int:
     6
     """
     count = 0
+
     def expand(l: int, r: int) -> None:
         nonlocal count
-        while l >= 0 and r < len(s) and s[l] == s[r]: count += 1; l -= 1; r += 1
-    for i in range(len(s)): expand(i, i); expand(i, i+1)
+        while l >= 0 and r < len(s) and s[l] == s[r]:
+            count += 1
+            l -= 1
+            r += 1
+
+    for i in range(len(s)):
+        expand(i, i)
+        expand(i, i + 1)
     return count
 
 
@@ -122,11 +166,14 @@ def longest_common_prefix(strs: List[str]) -> str:
     >>> longest_common_prefix(["flower","flow","flight"])
     'fl'
     """
-    if not strs: return ""
+    if not strs:
+        return ""
     prefix = strs[0]
     for s in strs[1:]:
-        while not s.startswith(prefix): prefix = prefix[:-1]
-        if not prefix: return ""
+        while not s.startswith(prefix):
+            prefix = prefix[:-1]
+        if not prefix:
+            return ""
     return prefix
 
 
@@ -145,10 +192,13 @@ def encode(strs: List[str]) -> str:
 
 def decode(s: str) -> List[str]:
     """Decode encoded string back to list."""
-    res: List[str] = []; i = 0
+    res: List[str] = []
+    i = 0
     while i < len(s):
-        j = s.index("#", i); length = int(s[i:j])
-        res.append(s[j+1:j+1+length]); i = j+1+length
+        j = s.index("#", i)
+        length = int(s[i:j])
+        res.append(s[j + 1 : j + 1 + length])
+        i = j + 1 + length
     return res
 
 
@@ -157,26 +207,30 @@ def check_inclusion(s1: str, s2: str) -> bool:
     >>> check_inclusion("ab","eidbaooo")
     True
     """
-    if len(s1) > len(s2): return False
-    c1, c2 = Counter(s1), Counter(s2[:len(s1)])
-    if c1 == c2: return True
+    if len(s1) > len(s2):
+        return False
+    c1, c2 = Counter(s1), Counter(s2[: len(s1)])
+    if c1 == c2:
+        return True
     for i in range(len(s1), len(s2)):
         c2[s2[i]] += 1
-        old = s2[i-len(s1)]
+        old = s2[i - len(s1)]
         c2[old] -= 1
-        if c2[old] == 0: del c2[old]
-        if c1 == c2: return True
+        if c2[old] == 0:
+            del c2[old]
+        if c1 == c2:
+            return True
     return False
 
 
 if __name__ == "__main__":
     print("No repeat:", longest_substring_no_repeat("abcabcbb"))
-    print("Min window:", min_window_substring("ADOBECODEBANC","ABC"))
-    print("Anagram:", is_anagram("anagram","nagaram"))
-    print("Groups:", len(group_anagrams(["eat","tea","tan","ate","nat","bat"])))
+    print("Min window:", min_window_substring("ADOBECODEBANC", "ABC"))
+    print("Anagram:", is_anagram("anagram", "nagaram"))
+    print("Groups:", len(group_anagrams(["eat", "tea", "tan", "ate", "nat", "bat"])))
     print("Palindrome:", is_palindrome_str("A man a plan a canal Panama"))
     print("Longest palindrome:", longest_palindromic_substring("babad"))
-    print("KMP:", kmp_search("AABAACAADAABAABA","AABA"))
+    print("KMP:", kmp_search("AABAACAADAABAABA", "AABA"))
     print("Palindrome count:", count_palindromic_substrings("aaa"))
-    print("Common prefix:", longest_common_prefix(["flower","flow","flight"]))
-    print("Check inclusion:", check_inclusion("ab","eidbaooo"))
+    print("Common prefix:", longest_common_prefix(["flower", "flow", "flight"]))
+    print("Check inclusion:", check_inclusion("ab", "eidbaooo"))

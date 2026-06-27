@@ -1,17 +1,19 @@
 """Unit tests for hashing patterns."""
-import pytest
+
+
 from src.hashing.hash_algorithms import (
-    contains_duplicate, 
-    longest_consecutive, 
-    subarray_sum_k,
-    top_k_frequent, 
-    find_duplicates,
     LRUCache,
-    two_sum, 
-    group_anagrams, 
+    TwoSum,
+    contains_duplicate,
+    find_duplicates,
+    group_anagrams,
+    longest_consecutive,
     ransom_note,
-    TwoSum
+    subarray_sum_k,
+    top_k_frequent,
+    two_sum,
 )
+
 
 def test_contains_dup():
     assert contains_duplicate([1, 2, 3, 1]) is True
@@ -48,15 +50,15 @@ def test_lru():
     lru.put(1, 1)
     lru.put(2, 2)
     assert lru.get(1) == 1
-    
-    lru.put(3, 3)          # Evicts key 2
+
+    lru.put(3, 3)  # Evicts key 2
     assert lru.get(2) == -1
-    
-    lru.put(4, 4)          # Evicts key 1
+
+    lru.put(4, 4)  # Evicts key 1
     assert lru.get(1) == -1
     assert lru.get(3) == 3
     assert lru.get(4) == 4
-    
+
     # Updating an existing key shouldn't alter capacity limit
     lru.put(3, 30)
     assert lru.get(3) == 30
@@ -88,12 +90,12 @@ def test_two_sum_class():
     ts.add(1)
     ts.add(3)
     ts.add(5)
-    assert ts.find(4) is True   # 1 + 3
+    assert ts.find(4) is True  # 1 + 3
     assert ts.find(7) is False
-    
+
     # Check item duplication edge cases
     ts2 = TwoSum()
     ts2.add(3)
     assert ts2.find(6) is False  # Cannot reuse the same element instance
     ts2.add(3)
-    assert ts2.find(6) is True   # Can use two separate instances of '3'
+    assert ts2.find(6) is True  # Can use two separate instances of '3'

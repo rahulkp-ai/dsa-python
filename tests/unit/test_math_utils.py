@@ -3,18 +3,18 @@
 import pytest
 
 from src.math_algorithms.math_utils import (
-    gcd,
-    lcm,
-    sieve_of_eratosthenes,
-    is_prime,
-    power_mod,
-    factorial_mod,
-    nCr_mod,
     count_digits,
     digit_sum,
-    reverse_number,
+    factorial_mod,
+    gcd,
     is_perfect_square,
+    is_prime,
+    lcm,
+    nCr_mod,
     nth_fibonacci_matrix,
+    power_mod,
+    reverse_number,
+    sieve_of_eratosthenes,
 )
 
 
