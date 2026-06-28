@@ -5,7 +5,7 @@ Gas Station, Assign Cookies, Merge Intervals, Min Arrows, Huffman.
 """
 
 import heapq
-from typing import Dict, List
+from typing import Dict, List, Optional
 
 
 def activity_selection(start: List[int], finish: List[int]) -> List[int]:
@@ -173,8 +173,8 @@ class HuffmanNode:
     def __init__(self, char: str, freq: int) -> None:
         self.char = char
         self.freq = freq
-        self.left: "HuffmanNode|None" = None
-        self.right: "HuffmanNode|None" = None
+        self.left: Optional["HuffmanNode"] = None
+        self.right: Optional["HuffmanNode"] = None
 
     def __lt__(self, other: "HuffmanNode") -> bool:
         return self.freq < other.freq
@@ -199,7 +199,7 @@ def huffman_coding(text: str) -> Dict[str, str]:
         heapq.heappush(heap, m)
     codes: Dict[str, str] = {}
 
-    def build(node: HuffmanNode | None, code: str) -> None:
+    def build(node: Optional["HuffmanNode"], code: str) -> None:
         if not node:
             return
         if node.char:
