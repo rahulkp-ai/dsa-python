@@ -1,6 +1,7 @@
 # Repository Architecture
 
 ## Overview
+
 ```
 DSA-Python/
 ├── src/                    # Core implementations (18 modules)
@@ -26,6 +27,7 @@ DSA-Python/
 5. **Self-Documenting** — Docstrings include time/space complexity
 
 ## Module Dependencies
+
 ```
 src/sorting         → no internal deps
 src/searching       → no internal deps
@@ -54,6 +56,7 @@ src/dashboard/app   → imports from all src modules
 
 1. Identify the correct module in `src/`
 2. Follow the template:
+
 ```python
 def algorithm_name(input: List[int]) -> int:
     """
@@ -74,6 +77,7 @@ def algorithm_name(input: List[int]) -> int:
     # Implementation
     pass
 ```
+
 3. Add `if __name__ == "__main__"` demo
 4. Add unit tests in `tests/unit/test_<module>.py`
 5. Run `make format && make lint && make test`
