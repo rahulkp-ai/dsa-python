@@ -26,12 +26,16 @@ jobs:
           python - <<'PY'
           import glob
           import nbformat
-          from nbformat import normalize
+          from nbformat.validator import normalize  # Updated import for nbformat 5.10.0+
+
           for p in glob.glob("notebooks/*.ipynb"):
               try:
                   with open(p, "r", encoding="utf-8") as f:
                       nb = nbformat.read(f, as_version=4)
-                  nb = normalize(nb)
+                  
+                  # Normalizes the notebook object in place
+                  normalize(nb)
+                  
                   with open(p, "w", encoding="utf-8") as f:
                       nbformat.write(nb, f)
                   print("Normalized", p)
