@@ -7,10 +7,38 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
+
       - uses: actions/setup-python@v5
         with:
           python-version: "3.11"
-      - run: pip install jupyter nbval
+
+      - name: Install dependencies
+        run: |
+          python -m pip install --upgrade pip
+          if [ -f requirements.txt ]; then
+            pip install -r requirements.txt
+          else
+            pip install jupyter nbval matplotlib seaborn nbformat ipykernel
+          fi
+
+      - name: Normalize notebooks (adds missing id fields)
+        run: |
+          python - <<'PY'
+          import glob
+          import nbformat
+          from nbformat import normalize
+          for p in glob.glob("notebooks/*.ipynb"):
+              try:
+                  with open(p, "r", encoding="utf-8") as f:
+                      nb = nbformat.read(f, as_version=4)
+                  nb = normalize(nb)
+                  with open(p, "w", encoding="utf-8") as f:
+                      nbformat.write(nb, f)
+                  print("Normalized", p)
+              except Exception as e:
+                  print("Skipping normalization for", p, ":", e)
+          PY
+
       - name: Validate notebooks
         run: |
           if ls notebooks/*.ipynb 2>/dev/null; then
